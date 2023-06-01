@@ -20,7 +20,7 @@ double calculateAVerageTime(vector<int> arr) {
     for (int i=0; i<V; i++) {
         total += arr[i];
     }
-    return total/(V-1);
+    return (total*1.0)/(V-1);
 }
 
 
@@ -105,8 +105,8 @@ int main() {
                        { 5,  0,  0, 20,  0,  0}};
     
     vector<int> minDist;
-    vector<int> averageTimes;
-    double avgTime = 0;
+    vector<double> averageTimes;
+    double avgTime = 0.0;
 
     for (int source=0; source<V; source++) {
         // Function call
