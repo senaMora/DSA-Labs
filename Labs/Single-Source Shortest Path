@@ -1,0 +1,130 @@
+#include <iostream>
+#include <vector>
+#include <limits.h>
+
+using namespace std;
+
+// Number of vertices in the graph
+#define V 6
+
+// the function to print a vector
+void printSolution(vector<int> arr) {
+	cout << "Vertex \t Distance from Source" << endl;
+	for (int i=0; i<V; i++)
+		cout << " " << i << "\t\t" << arr[i] << endl;
+}
+
+// the function to calculate the average time of a source city
+double calculateAVerageTime(vector<int> arr) {
+    int total = 0;
+    for (int i=0; i<V; i++) {
+        total += arr[i];
+    }
+    return total/(V-1);
+}
+
+
+// the function to find the vertex with minimum
+// distance value, from the set of vertices not yet included
+// in shortest path tree
+int minDistance(int dist[], bool sptSet[]) {
+
+	// Initialize min value
+	int min = INT_MAX;
+    int min_index;
+
+	for (int v=0; v<V; v++)
+		if ((sptSet[v] == false) && (dist[v] <= min)) {
+            min = dist[v];
+            min_index = v;
+        }
+
+	return min_index;
+}
+
+
+// Function that implements Dijkstra's single source
+// shortest path algorithm for a graph represented using
+// adjacency matrix representation
+vector<int> dijkstra(int graph[V][V], int source) {
+    // The output array. dist[i] will hold the shortest distance from source to city i
+	int dist[V]; 
+
+    // sptSet[i] will be true if vertex i is included in shortest path tree or 
+    // shortest distance from src to i is finalized
+	bool sptSet[V];  
+
+	// Initialize all distances as INFINITE and stpSet[] as false
+	for (int i=0; i<V; i++) {
+        dist[i] = INT_MAX;
+        sptSet[i] = false;
+    }
+
+	// Distance of source vertex from it set as 0
+	dist[source] = 0;
+
+	// Find shortest path for all vertices
+	for (int count=0; count<(V-1); count++) {
+		// Pick the minimum distance vertex from the set of
+		// vertices not yet processed. 
+		// u is always equal to source in the first iteration.
+		int u = minDistance(dist, sptSet);
+
+		// Mark the picked vertex as processed
+		sptSet[u] = true;
+
+		// Update dist value of the adjacent vertices of the
+		// picked vertex
+		for (int v=0; v<V; v++)
+
+			// Update dist[v] only if is not in sptSet,
+			// there is an edge from u to v, 
+			// and total weight of path from src to v through u is smaller than current value of dist[v]
+			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && (dist[u] + graph[u][v] < dist[v])) {
+            	dist[v] = dist[u] + graph[u][v];
+            }
+	}
+
+    // convert the array to a vector
+    vector<int> vec_dist;
+    for (int nodeDis : dist) {
+        vec_dist.push_back(nodeDis);
+    }
+    return vec_dist;
+}
+
+	
+int main() {
+
+	/* Let us create the example graph discussed above */
+	int graph[V][V] = {{ 0, 10,  0,  0, 15,  5},
+                       {10,  0, 10, 30,  0,  0},
+                       { 0, 10,  0, 12,  5,  0},
+                       { 0, 30, 12,  0,  0, 20},
+                       {15,  0,  5,  0,  0,  0},
+                       { 5,  0,  0, 20,  0,  0}};
+    
+    vector<int> minDist;
+    vector<int> averageTimes;
+    double avgTime = 0;
+
+    for (int source=0; source<V; source++) {
+        // Function call
+	    minDist = dijkstra(graph, source);
+
+        avgTime = calculateAVerageTime(minDist);
+        averageTimes.push_back(avgTime);
+
+        cout << "\nSource " << source << endl;
+        // print the constructed distance vector
+	    printSolution(minDist);
+    }
+
+    cout << "\nsource city\t" << "Average Time\n";
+    for (int i=0; i<V; i++) {
+        
+        cout << i << "\t\t" << averageTimes[i] << endl;
+    }
+
+	return 0;
+}
