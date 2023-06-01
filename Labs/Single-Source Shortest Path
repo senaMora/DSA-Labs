@@ -85,6 +85,8 @@ vector<int> dijkstra(int graph[V][V], int source) {
             }
 	}
 
+    
+
     // convert the array to a vector
     vector<int> vec_dist;
     for (int nodeDis : dist) {
@@ -124,6 +126,27 @@ int main() {
     for (int i=0; i<V; i++) {
         
         cout << i << "\t\t" << averageTimes[i] << endl;
+    }
+
+    double minAvgTime = INT_MAX;
+    vector<int> minIndexes;
+    
+    // procedure for find the cities with minimum average times
+    for (int i=0; i<V; i++) {
+        if (averageTimes[i] < minAvgTime) {
+            minAvgTime = averageTimes[i];
+            minIndexes.clear();
+            minIndexes.push_back(i);
+        }
+        else if (averageTimes[i] == minAvgTime) {
+            minIndexes.push_back(i);
+        }
+    }
+
+    // print minimum average time and cities
+    cout << "Minimum Average Time is: " << minAvgTime << endl;
+    for (int cityNo : minIndexes) {
+        cout << cityNo << "  ";
     }
 
 	return 0;
