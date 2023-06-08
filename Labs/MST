@@ -1,5 +1,5 @@
-#include <cstring>
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 // initialize the no of vertices in the given graph
@@ -7,31 +7,31 @@ using namespace std;
 
 
 int main() {
-    int minimum_cost=0;
-    // create a 2d array of size 6x6
-    //making an adjacency matrix to represent the graph
+    int min_cost = 0; // minimum cost
+    int n_edges;  // number of edge
 
+    //creating adjacency matrix for the graph
     int G[][6] = {{ 0,  3,  0,  0,  0,  1},
                   { 3,  0,  2,  1, 10,  0},
                   { 0,  2,  0,  3,  0,  5},
-                  { 0,  1,  3,  0,  5, 0},
-                  { 0, 10,  0,  5,  0, 4},
-                  { 1,  0,  5,  0,  4, 0}};
-    int no_edge;  // number of edge
-
+                  { 0,  1,  3,  0,  5,  0},
+                  { 0, 10,  0,  5,  0,  4},
+                  { 1,  0,  5,  0,  4,  0}};
+    
     // create a array to track traveled vertex
     // traveled will become true otherwise false
     int traveled[V];
 
     // set traveled false initially
+    for (int i=0; i<V; i++) traveled[i] = 
     memset(traveled, false, sizeof(traveled));
 
     // set number of edge to 0
-    no_edge = 0;
+    n_edges = 0;
 
 
-// The minimum number of edges in a spanning tree will always be less than (V - 1),
-// where V represents the total number of vertices in the graph.
+    // The minimum number of edges in a spanning tree will always be less than (V - 1),
+    // where V represents the total number of vertices in the graph.
 
     // select the first vertex and make it as true since it has already travelled.
     traveled[0] = true;
@@ -42,7 +42,7 @@ int main() {
     // print for edge and weight
     cout << " Path\t" << "Cost" << endl;
 
-    while (no_edge < V - 1) {
+    while (n_edges < V - 1) {
         // Iterate through each vertex in set S and identify all its neighboring vertices.
         // Calculate the distance from the vertex visited in step 1.
         // If the vertex is already included in set S, ignore it; otherwise,
@@ -68,9 +68,9 @@ int main() {
         cout << x << " -- " << y << "\t " << G[x][y];
         cout << endl;
         traveled[y] = true;
-        no_edge++;
-        minimum_cost+=G[x][y];
+        n_edges++;
+        min_cost+=G[x][y];
     }
-    cout << "The minimum cost of the graph is: "<< minimum_cost << endl;
+    cout << "The minimum cost of the graph is: "<< min_cost << endl;
     return 0;
 }
