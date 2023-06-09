@@ -11,66 +11,63 @@ int main() {
     int n_edges;  // number of edge
 
     //creating adjacency matrix for the graph
-    int G[][6] = {{ 0,  3,  0,  0,  0,  1},
-                  { 3,  0,  2,  1, 10,  0},
-                  { 0,  2,  0,  3,  0,  5},
-                  { 0,  1,  3,  0,  5,  0},
-                  { 0, 10,  0,  5,  0,  4},
-                  { 1,  0,  5,  0,  4,  0}};
+    int graph[6][6] = {{ 0,  3,  0,  0,  0,  1},
+                       { 3,  0,  2,  1, 10,  0},
+                       { 0,  2,  0,  3,  0,  5},
+                       { 0,  1,  3,  0,  5,  0},
+                       { 0, 10,  0,  5,  0,  4},
+                       { 1,  0,  5,  0,  4,  0}};
     
-    // create a array to track traveled vertex
-    // traveled will become true otherwise false
-    int traveled[V];
+    // array to mark traversed nodes    
+    bool traveled[V];
 
-    // set traveled false initially
-    for (int i=0; i<V; i++) traveled[i] = 
-    memset(traveled, false, sizeof(traveled));
+    // set all traveled false initially
+    for (int i=0; i<V; i++) traveled[i] = false;
 
     // set number of edge to 0
     n_edges = 0;
 
-
-    // The minimum number of edges in a spanning tree will always be less than (V - 1),
-    // where V represents the total number of vertices in the graph.
-
-    // select the first vertex and make it as true since it has already travelled.
+    // V is the total number of vertices in the graph.
+    // first vertex set it to true as it is travelled.
     traveled[0] = true;
 
-    int x;  //  row number
-    int y;  //  column number
+    int n_row;   // row number
+    int n_col;   // column number
 
-    // print for edge and weight
+    // print titles
     cout << " Path\t" << "Cost" << endl;
 
-    while (n_edges < V - 1) {
-        // Iterate through each vertex in set S and identify all its neighboring vertices.
-        // Calculate the distance from the vertex visited in step 1.
-        // If the vertex is already included in set S, ignore it; otherwise,
-        // select the closest vertex to the visited vertex in step 1 as the next choice.
+    while (n_edges < (V-1)) {
+        int min = INT_MAX; // set minimum to a higher value
+        n_row = 0;
+        n_col = 0;
 
-        int min = INT_MAX;
-        x = 0;
-        y = 0;
+        // go through each vertex in graph
+        for (int i=0; i<V; i++) {
 
-        for (int i = 0; i < V; i++) {
             if (traveled[i]) {
-                for (int j = 0; j < V; j++) {
-                    if (!traveled[j] && G[i][j]) {  // not in traveled and there is an edge
-                        if (min > G[i][j]) {
-                            min = G[i][j];
-                            x = i;
-                            y = j;
+                for (int j=0; j<V; j++) {
+                    // If the vertex is already included traversed, ignore it
+                    if ((!traveled[j]) && (graph[i][j])) {  // not in traveled and there is an edge
+                        // calculate the shortest distance
+                        if (min > graph[i][j]) {
+                            min = graph[i][j];
+                            n_row = i;
+                            n_col = j;
                         }
                     }
                 }
             }
         }
-        cout << x << " -- " << y << "\t " << G[x][y];
-        cout << endl;
-        traveled[y] = true;
+        cout << n_row << " -- " << n_col << "\t " << graph[n_row][n_col];
+        cout << "\n";
+
+        // mark vertex as traversed
+        traveled[n_col] = true;
         n_edges++;
-        min_cost+=G[x][y];
+        min_cost += graph[n_row][n_col]; // continuou the calculation of minimum cost
     }
+
     cout << "The minimum cost of the graph is: "<< min_cost << endl;
     return 0;
 }
